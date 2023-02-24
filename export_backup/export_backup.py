@@ -41,7 +41,7 @@ def infoblox_backup():
         payload = dict(token=token)
         backup_complete = requests.post(f'{gm_url}/fileop?_function=downloadcomplete', auth=(gm_user, gm_pwd), verify=False, headers=headers, data=json.dumps(payload))
         backup_complete.raise_for_status()
-        print("Backup complete!")
+        print("Backup completed!")
     except Exception as e:
         print(f"Backup failed due to error: {e}")
 
