@@ -1,3 +1,13 @@
+"""
+
+This script downloads an Infoblox database backup and saves it to the local file system. 
+It connects to an Infoblox Grid Manager using the RESTfulAPI and authenticates using the provided credentials. 
+The backup file is downloaded using the URL received from the response of initiating the backup session. 
+The file is then saved locally with a timestamped filename. 
+Finally, a POST request is sent to trigger download complete using the received token.
+
+"""
+
 import requests
 import json
 import time
