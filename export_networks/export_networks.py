@@ -10,7 +10,7 @@ Finally, the script triggers a call to indicate that the download is complete us
 import requests
 import json
 import time
-import os
+
 
 # Disable SSL warnings
 requests.packages.urllib3.disable_warnings()
