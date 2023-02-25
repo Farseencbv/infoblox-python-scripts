@@ -16,7 +16,7 @@ import os
 requests.packages.urllib3.disable_warnings()
 
 # Grid Variables
-gm_url = "https://192.168.1.100/wapi/v2.7"
+gm_url = "https://100.100.100.100/wapi/v2.7"
 gm_user = "farseencbv"
 gm_pwd = "infoblox"
 now = time.strftime("%Y-%m-%d")
@@ -51,9 +51,9 @@ def networks_export_csv():
                                       auth=(gm_user, gm_pwd), headers=headers)
         download_file.raise_for_status()
 
-        # Rename the CSV file
-        open("Networks.csv", "wb").write(download_file.content)
-        os.rename("Networks.csv", outputfile)
+        # Write CSV file to output file
+        with open(outputfile, "wb") as file:
+            file.write(download_file.content)
 
         print(f"The Network export has been downloaded as '{outputfile}'")
     except requests.exceptions.RequestException as e:
