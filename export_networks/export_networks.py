@@ -16,7 +16,7 @@ import os
 requests.packages.urllib3.disable_warnings()
 
 # Grid Variables
-gm_url = "https://100.100.100.100/wapi/v2.7"
+gm_url = "https://192.168.1.100/wapi/v2.7"
 gm_user = "farseencbv"
 gm_pwd = "infoblox"
 now = time.strftime("%Y-%m-%d")
