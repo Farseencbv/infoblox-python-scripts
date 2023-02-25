@@ -11,7 +11,7 @@ Finally, a POST request is sent to trigger download complete using the received 
 import requests
 import json
 import time
-import os
+
 
 requests.packages.urllib3.disable_warnings()
 
@@ -38,11 +38,10 @@ def infoblox_backup():
         headers = {"content-type": "application/force-download"}
         download_file = requests.get(url, auth=(gm_user, gm_pwd), verify=False, stream=True, headers=headers)
         download_file.raise_for_status()
-        with open('database.bak', 'wb') as f:
-            f.write(download_file.content)
 
-        # Step 3: Rename the backup file
-        os.rename('database.bak', outputfile)
+        # Write backup file to output file
+        with open(outputfile, 'wb') as file:
+            file.write(download_file.content)
 
         print(f"The backup has been downloaded as '{outputfile}'")
 
