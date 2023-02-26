@@ -16,8 +16,8 @@ import time
 requests.packages.urllib3.disable_warnings()
 
 # Grid Variables
-gm_url = "https://192.168.1.100/wapi/v2.7"
-gm_user = "farseencbv"
+gm_url = "https://1.1.1.1/wapi/v2.7"
+gm_user = "fars"
 gm_pwd = "infoblox"
 now = time.strftime("%Y-%m-%d")
 outputfile = f"Infoblox_Networks_{now}.csv"
@@ -26,52 +26,49 @@ outputfile = f"Infoblox_Networks_{now}.csv"
 def networks_export_csv():
     """Function to download all networks from Infoblox as CSV"""
 
-    try:
-        # Initiate a session to CSV Export of all Networks from On-Prem network view
-        networks = {"_object": "network", "network_view": "On-Prem"}
-        headers = {"content-type": "application/json"}
-        response = requests.post(f"{gm_url}/fileop?_function=csv_export",
-                                 verify=False, auth=(gm_user, gm_pwd),
-                                 headers=headers, data=json.dumps(networks))
+    # Initiate a session to CSV Export of all Networks from On-Prem network view
+    networks = {"_object": "network", "network_view": "On-Prem"}
+    headers = {"content-type": "application/json"}
+    response = requests.post(f"{gm_url}/fileop?_function=csv_export",
+                             verify=False, auth=(gm_user, gm_pwd),
+                             headers=headers, data=json.dumps(networks))
+    
+    if not response.ok:
+        raise requests.exceptions.RequestException(f"CSV export initiation failed with HTTP error code {response.status_code}")
 
-        response.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        print(f"CSV export initiation failed: {e}")
-        return
 
-    try:
-        # Extract token and URL from the response
-        d = response.json()
-        token = d["token"]
-        url = d["url"]
+    # Extract token and URL from the response
+    d = response.json()
+    token = d["token"]
+    url = d["url"]
 
-        # Download CSV  file using the URL
-        headers = {"content-type": "application/force-download"}
-        download_file = requests.get(url, verify=False, stream=True,
-                                      auth=(gm_user, gm_pwd), headers=headers)
-        download_file.raise_for_status()
 
-        # Write CSV file to output file
-        with open(outputfile, "wb") as file:
-            file.write(download_file.content)
+    # Download CSV  file using the URL
+    headers = {"content-type": "application/force-download"}
+    download_file = requests.get(url, verify=False, stream=True,
+                                  auth=(gm_user, gm_pwd), headers=headers)
+    
+    if not download_file.ok:
+        raise requests.exceptions.RequestException(f"CSV download failed with HTTP error code {download_file.status_code}")
 
-        print(f"The Network export has been downloaded as '{outputfile}'")
-    except requests.exceptions.RequestException as e:
-        print(f"CSV export failed: {e}")
-        return
 
-    try:
-        # Post a call to trigger download complete using the received token
-        headers = {"content-type": "application/json"}
-        payload = dict(token=token)
-        export_complete = requests.post(f"{gm_url}/fileop?_function=downloadcomplete",
-                                         verify=False, auth=(gm_user, gm_pwd),
-                                         headers=headers, data=json.dumps(payload))
+    # Write CSV file to output file
+    with open(outputfile, "wb") as file:
+        file.write(download_file.content)
 
-        export_complete.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        print(f"CSV export didn't complete as expected: {e}")
-        return
+    print(f"The Network export has been downloaded as '{outputfile}'")
+
+
+    # Post a call to trigger download complete using the received token
+    headers = {"content-type": "application/json"}
+    payload = dict(token=token)
+    export_complete = requests.post(f"{gm_url}/fileop?_function=downloadcomplete",
+                                     verify=False, auth=(gm_user, gm_pwd),
+                                     headers=headers, data=json.dumps(payload))
+    
+    if not export_complete.ok:
+        raise requests.exceptions.RequestException(f"CSV export didn't complete as expected with HTTP error code {export_complete.status_code}")
+
 
 
 if __name__ == "__main__":
