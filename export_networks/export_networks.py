@@ -15,6 +15,7 @@ import time
 # Disable SSL warnings
 requests.packages.urllib3.disable_warnings()
 
+
 # Grid Variables
 gm_url = "https://1.1.1.1/wapi/v2.7"
 gm_user = "fars"
@@ -23,15 +24,19 @@ now = time.strftime("%Y-%m-%d")
 outputfile = f"Infoblox_Networks_{now}.csv"
 
 
+# Setting up a session with the Infoblox GM
+s = requests.Session()
+s.auth = (gm_user, gm_pwd)
+s.verify = False
+headers = {"content-type": "application/json"}
+
+
 def networks_export_csv():
     """Function to download all networks from Infoblox as CSV"""
 
     # Initiate a session to CSV Export of all Networks from On-Prem network view
     networks = {"_object": "network", "network_view": "On-Prem"}
-    headers = {"content-type": "application/json"}
-    response = requests.post(f"{gm_url}/fileop?_function=csv_export",
-                             verify=False, auth=(gm_user, gm_pwd),
-                             headers=headers, data=json.dumps(networks))
+    response = s.post(f"{gm_url}/fileop?_function=csv_export",headers=headers, data=json.dumps(networks))
     
     if not response.ok:
         raise requests.exceptions.RequestException(f"CSV export initiation failed with HTTP error code {response.status_code}")
@@ -44,9 +49,8 @@ def networks_export_csv():
 
 
     # Download CSV  file using the URL
-    headers = {"content-type": "application/force-download"}
-    download_file = requests.get(url, verify=False, stream=True,
-                                  auth=(gm_user, gm_pwd), headers=headers)
+    headers_force = {"content-type": "application/force-download"}
+    download_file = s.get(url, stream=True, headers=headers_force)
     
     if not download_file.ok:
         raise requests.exceptions.RequestException(f"CSV download failed with HTTP error code {download_file.status_code}")
@@ -60,11 +64,8 @@ def networks_export_csv():
 
 
     # Post a call to trigger download complete using the received token
-    headers = {"content-type": "application/json"}
     payload = dict(token=token)
-    export_complete = requests.post(f"{gm_url}/fileop?_function=downloadcomplete",
-                                     verify=False, auth=(gm_user, gm_pwd),
-                                     headers=headers, data=json.dumps(payload))
+    export_complete = s.post(f"{gm_url}/fileop?_function=downloadcomplete",headers=headers, data=json.dumps(payload))
     
     if not export_complete.ok:
         raise requests.exceptions.RequestException(f"CSV export didn't complete as expected with HTTP error code {export_complete.status_code}")
