@@ -18,7 +18,7 @@ outputfile = f'infoblox_backup_{now}.bak'
 s = requests.Session()
 s.auth = (gm_user, gm_pwd)
 headers = {"content-type": "application/json"}
-
+s.verify = False
 
 def infoblox_backup():
     """Function to download Infoblox database backup"""
@@ -26,7 +26,7 @@ def infoblox_backup():
 
     # Step 1: Initiate Grid Backup Session
     backup = {"type": "BACKUP"}
-    response = s.post(f'{gm_url}/fileop?_function=getgriddata', verify=False, headers=headers, data=json.dumps(backup))
+    response = s.post(f'{gm_url}/fileop?_function=getgriddata', headers=headers, data=json.dumps(backup))
     
     if not response.ok:
         raise Exception(f"Grid backup initiation failed with HTTP error code {response.status_code}")
@@ -38,7 +38,7 @@ def infoblox_backup():
 
     # Step 2: Download backup file using the url
     headers_force = {"content-type": "application/force-download"}
-    download_file = s.get(url, verify=False, stream=True, headers=headers_force)
+    download_file = s.get(url, stream=True, headers=headers_force)
     
     if not download_file.ok:
         raise Exception(f"Downloading backup file failed with HTTP error code {download_file.status_code}")
@@ -52,7 +52,7 @@ def infoblox_backup():
 
     # Step 4: Post a call to trigger download complete using the received token from the above steps
     payload = dict(token=token)
-    backup_complete = s.post(f'{gm_url}/fileop?_function=downloadcomplete', verify=False, headers=headers, data=json.dumps(payload))
+    backup_complete = s.post(f'{gm_url}/fileop?_function=downloadcomplete', headers=headers, data=json.dumps(payload))
     
     if not backup_complete.ok:
         raise Exception(f"Download token deletion failed with HTTP error code {backup_complete.status_code}")
