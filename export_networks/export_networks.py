@@ -28,7 +28,7 @@ outputfile = f"Infoblox_Networks_{now}.csv"
 s = requests.Session()
 s.auth = (gm_user, gm_pwd)
 s.verify = False
-headers = {"content-type": "application/json"}
+s.headers = {"content-type": "application/json"}
 
 
 def networks_export_csv():
@@ -36,7 +36,7 @@ def networks_export_csv():
 
     # Initiate a session to CSV Export of all Networks from On-Prem network view
     networks = {"_object": "network", "network_view": "On-Prem"}
-    response = s.post(f"{gm_url}/fileop?_function=csv_export",headers=headers, data=json.dumps(networks))
+    response = s.post(f"{gm_url}/fileop?_function=csv_export", data=json.dumps(networks))
     
     if not response.ok:
         raise requests.exceptions.RequestException(f"CSV export initiation failed with HTTP error code {response.status_code}")
@@ -65,7 +65,7 @@ def networks_export_csv():
 
     # Post a call to trigger download complete using the received token
     payload = dict(token=token)
-    export_complete = s.post(f"{gm_url}/fileop?_function=downloadcomplete",headers=headers, data=json.dumps(payload))
+    export_complete = s.post(f"{gm_url}/fileop?_function=downloadcomplete", data=json.dumps(payload))
     
     if not export_complete.ok:
         raise requests.exceptions.RequestException(f"CSV export didn't complete as expected with HTTP error code {export_complete.status_code}")
