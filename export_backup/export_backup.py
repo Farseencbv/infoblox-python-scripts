@@ -61,8 +61,8 @@ def infoblox_backup():
 
 
     # Step 4: Post a call to trigger download complete using the received token from the above steps
-    payload = dict(token=token)
-    backup_complete = s.post(f'{gm_url}/fileop?_function=downloadcomplete', data=json.dumps(payload))
+    backup_token = {"token": token}
+    backup_complete = s.post(f'{gm_url}/fileop?_function=downloadcomplete', data=json.dumps(backup_token))
     
     if not backup_complete.ok:
         raise Exception(f"Download token deletion failed with HTTP error code {backup_complete.status_code}")
