@@ -3,7 +3,7 @@ This script downloads an Infoblox database backup and saves it to the local file
 It connects to an Infoblox Grid Manager using the RESTfulAPI and authenticates using the provided credentials. 
 The backup file is downloaded using the URL received from the response of initiating the backup session. 
 The file is then saved locally with a timestamped filename. 
-Finally, a POST request is sent to trigger download complete using the received token.
+Finally, a POST request is sent to trigger the download complete using the received token.
 
 """
 
@@ -11,13 +11,13 @@ Finally, a POST request is sent to trigger download complete using the received 
 import requests
 import json
 import time
+from urllib3.exceptions import InsecureRequestWarning
 
-
-requests.packages.urllib3.disable_warnings()
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 # Grid variables
-gm_url = "https://1.1.1.1/wapi/v2.7"
+gm_url = "https://1.1.1.1/wapi/v2.12.2"
 gm_user = 'fars'
 gm_pwd = 'infoblox'
 now = time.strftime('%Y-%m-%d')
@@ -41,14 +41,14 @@ def infoblox_backup():
     if not response.ok:
         raise Exception(f"Grid backup initiation failed with HTTP error code {response.status_code}")
     
-    d = response.json()
-    token = d['token']
-    url = d['url']
+    response_data = response.json()
+    token = response_data['token']
+    url = response_data['url']
 
 
     # Step 2: Download backup file using the url
-    headers_force = {"content-type": "application/force-download"}
-    download_file = s.get(url, stream=True, headers=headers_force)
+    download_headers = {"content-type": "application/force-download"}
+    download_file = s.get(url, stream=True, headers=download_headers)
     
     if not download_file.ok:
         raise Exception(f"Downloading backup file failed with HTTP error code {download_file.status_code}")
