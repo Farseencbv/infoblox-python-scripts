@@ -51,7 +51,7 @@ def infoblox_backup():
     download_file = s.get(url, stream=True, headers=download_headers)
     
     if not download_file.ok:
-        raise Exception(f"Downloading backup file failed with HTTP error code {download_file.status_code}")
+        raise requests.exceptions.RequestException(f"Downloading backup file failed with HTTP error code {download_file.status_code}")
 
     # Write backup file to output file
     with open(outputfile, 'wb') as file:
@@ -65,7 +65,7 @@ def infoblox_backup():
     backup_complete = s.post(f'{gm_url}/fileop?_function=downloadcomplete', data=json.dumps(backup_token))
     
     if not backup_complete.ok:
-        raise Exception(f"Download token deletion failed with HTTP error code {backup_complete.status_code}")
+       raise requests.exceptions.RequestException(f"Download token deletion failed with HTTP error code {backup_complete.status_code}")
     
 
 
