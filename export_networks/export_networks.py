@@ -65,8 +65,8 @@ def networks_export_csv():
 
 
     # Post a call to trigger download complete using the received token
-    export_token = {'token' : token}
-    export_complete = s.post(f"{gm_url}/fileop?_function=downloadcomplete", data=json.dumps(export_token))))
+    export_token = {'token': token}
+    export_complete = s.post(f"{gm_url}/fileop?_function=downloadcomplete", data=json.dumps(export_token))
     
     if not export_complete.ok:
         raise requests.exceptions.RequestException(f"CSV export didn't complete as expected with HTTP error code {export_complete.status_code}")
