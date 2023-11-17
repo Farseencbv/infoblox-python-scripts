@@ -46,7 +46,7 @@ def networks_export_csv():
     # Extract token and URL from the response
     response_data = response.json()
     token = response_data['token']
-    url = response_data['url']]
+    url = response_data['url']
 
 
     # Download CSV  file using the URL
