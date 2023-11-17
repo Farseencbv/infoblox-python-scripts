@@ -11,10 +11,9 @@ Finally, a POST request is sent to trigger the download complete using the recei
 import requests
 import json
 import time
-from urllib3.exceptions import InsecureRequestWarning
 
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-
+# Disable SSL warnings
+requests.packages.urllib3.disable_warnings()
 
 # Grid variables
 gm_url = "https://1.1.1.1/wapi/v2.12.2"
