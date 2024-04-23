@@ -25,7 +25,7 @@ gm_pwd  = os.getenv('INFOBLOX_PASSWORD')
 # Grid Variables
 gm_url = "https://gridmaster/wapi/v2.12.2"
 now = time.strftime('%Y-%m-%d_%I-%M_%p')
-outputfile = f'FNF_Infoblox_Backup_{now}.bak'
+outputfile = f'IB_Backup_{now}.bak'
 
 # Setting up a session with the Infoblox GM
 s = requests.Session()
