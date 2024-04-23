@@ -9,8 +9,8 @@ This script downloads the Infoblox database backup from a specified Infoblox Gri
 
 # Requirements
 
-- Python 3.x
-- **`requests`** library
+- Python 3.X
+- requests, json, time, urllib3, os, load_dotenv
 
 # Installation
 
