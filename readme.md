@@ -9,15 +9,13 @@ This repository contains Python scripts for working with Infoblox Grids.
 
 # Requirements
 
-- Python 3.x
-- `requests` library
-- `csv` library (for `infoblox_export_networks.py`)
+- Python 3.X
+- `requests, json, time, urllib3, os, load_dotenv`
 
 # Installation
 
 1. Install Python 3.x  
-2. Install the `requests` library by running `pip install requests` in the command line.
-3. Install the `csv` library by running `pip install csv` in the command line (for `infoblox_export_networks.py`).
+2. Install the `requests`, `python-dotenv`  libraries using PIP 
 
 # Contributing
 Feel free to contribute to this repository by submitting pull requests or opening issues.
