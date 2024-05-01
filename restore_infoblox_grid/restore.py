@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Grid Creds
-load_dotenv('.env')
+load_dotenv('/filepath/.env')
 gm_user = os.getenv('INFOBLOX_USERNAME')
 gm_pwd  = os.getenv('INFOBLOX_PASSWORD')
 
