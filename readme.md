@@ -7,7 +7,7 @@ This repository contains Python scripts for working with Infoblox Grids.
 - `infoblox_backup.py`: Downloads the Infoblox database backup from a specified Infoblox Grid and saves it locally with the current date appended to the filename.
 - `infoblox_export_networks.py`: Exports all networks from a specified Infoblox Grid to a CSV file.
 
-- infoblox grid restore
+- `restore.py` : Restore the Infoblox Grid using an existing database backup file.
 
 # Requirements
 
