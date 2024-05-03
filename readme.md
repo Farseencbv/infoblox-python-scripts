@@ -17,7 +17,7 @@ This repository contains Python scripts for working with Infoblox Grids.
 # Installation
 
 1. Install Python 3.x  
-2. Install the `requests`, `python-dotenv`  libraries using PIP 
+2. Install the requests, python-dotenv  libraries using PIP 
 
 # Contributing
 Feel free to contribute to this repository by submitting pull requests or opening issues.
