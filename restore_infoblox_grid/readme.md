@@ -1,4 +1,4 @@
-# Infoblox Backup Script
+# Infoblox Grid Restore Script
 
 This script restore the Infoblox grid using an existing backup file
 
