@@ -12,7 +12,7 @@ This repository contains Python scripts for working with Infoblox Grids.
 # Requirements
 
 - Python 3.X
-- `requests, json, time, urllib3, os, load_dotenv`
+- requests, json, time, urllib3, os, load_dotenv
 
 # Installation
 
